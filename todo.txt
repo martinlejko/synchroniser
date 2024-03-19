@@ -1,0 +1,16 @@
+1. Get the args and check if the provided args are correct --> if not we log it into the default file and quit
+2. We init the full sync that means we copy the whole source directory into the replica but firstly we delete everything from it
+3. after that we periodically check the Hash of the src directory if the hash has changed from the initial we know that we have to sync it otherwise we just logg and wait for another periodically
+4. we crowl trought the src directory and find the files that have changed
+cases:
+    the new file is created --> we transfer the file utils 
+    existing file is edited --> we can check if the file is there in the path and remove it and then transfer
+    existing file is deleted --> we will get rid of this when we crawl the replica direcotry
+    creation of a new folder --> check if it is a folder if yes and not in the replica we transfer the whole if in replica we will go trough it 
+    rename of the folder --> this will act as a separate new file 
+    rename of the file --> so we create new and then delete after
+5. we crowl trought the replica direcotry and ask if it is at the same path but in the src dir so if it is not we delete the file
+loop...
+
+
+we can do that we have a function sync direcotry that calls sync file and sync file is called upon every file in the direcotry
