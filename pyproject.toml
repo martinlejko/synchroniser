@@ -7,18 +7,23 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+schedule = "^1.2.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.3"
 pytest = "^8.1.1"
+mypy = "*"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.mypy]
+strict = true
+mypy_path = "src"
 
 [tool.ruff]
-line-length = 88
+line-length = 120
 indent-width = 4
 
 [tool.ruff.lint]
@@ -26,3 +31,10 @@ select = ["E","F","I"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+
+[tool.pytest.ini_options]
+addopts = """
+    --mypy
+    --ruff
+    """
