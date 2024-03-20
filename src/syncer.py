@@ -1,41 +1,44 @@
-import hashlib
 import logging
 import os
+from copythreader import ThreadedCopy
+from typing import Dict, List, Tuple
+from pathlib import Path
 
 
 class Syncer:
-    def __init__(self, src_dir: str, replica_dir: str, period: int) -> None:
-        self.src_dir = src_dir
-        self.replica_dir = replica_dir
-        self.period = period
-        self.hash_dict = {}
+    def __init__(self, src_dir: str, replica_dir: str) -> None:
+        self.src_dir = Path(src_dir)
+        self.replica_dir = Path(replica_dir)
+        self.modified_dates: Dict[Path, float] = {}
 
     def sync_folders(self) -> None:
-        if self.hash_dict.get(self.src_dir) != self.calculate_directory_hash(self.src_dir):
-            logging.info("Changes detected. Syncing the directories.")
-            self.hash_dict[self.src_dir] = self.calculate_directory_hash(self.src_dir)
+        modified_files = self.travers_get_modification_times(self.src_dir)
+        if not modified_files:
+            logging.info("No files to sync.")
         else:
-            logging.info("No changes detected. Skipping the sync.")
-        print(self.calculate_directory_hash(self.src_dir))
+            logging.info(f"Syncing {len(modified_files)} files.")
+            threaded_copy = ThreadedCopy(self.src_dir, self.replica_dir, modified_files)
 
-    def calculate_directory_hash(self, directory_path):
-        """
-        Calculate the MD5 hash of the directory.
-        """
-        md5 = hashlib.md5()
+    def has_been_modified(self, file_path: Path) -> bool:
+        last_modified = os.path.getmtime(file_path)
+        if file_path in self.modified_dates:
+            if self.modified_dates[file_path] != last_modified:
+                self.modified_dates[file_path] = last_modified
+                return True
+            else:
+                return False
+        self.modified_dates[file_path] = last_modified
+        return True
+
+    def travers_get_modification_times(self, directory_path: Path) -> List[Path]:
+        modified_files = []
         try:
             for root, dirs, files in os.walk(directory_path):
-                print(root, dirs, files)
                 for filename in files:
-                    file_path = os.path.join(root, filename)
-                    with open(file_path, "rb") as file:
-                        while True:
-                            data = file.read(8192)
-                            if not data:
-                                break
-                            md5.update(data)
+                    file_path = Path(root) / filename
+                    if self.has_been_modified(file_path):
+                        modified_files.append(file_path)
         except OSError as e:
-            print(f"Error calculating hash for directory {directory_path}: {e}")
-            return None
-
-        return md5.hexdigest()
+            print(f"Error getting modification time {directory_path}: {e}")
+            return ([], [])
+        return modified_files

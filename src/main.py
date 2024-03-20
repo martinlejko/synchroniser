@@ -12,7 +12,7 @@ def setup() -> None:
     parser = ArgParser()
     args = parser.parse_args()
     setup_logging(args.log_file)
-    syncer = Syncer(args.src_dir, args.replica_dir, args.period)
+    syncer = Syncer(args.src_dir, args.replica_dir)
     schedule.every(args.period).minutes.do(syncer.sync_folders)
     logging.info("Setup complete. Starting the program.")
 
