@@ -1,8 +1,10 @@
 import logging
 import os
-from copythreader import ThreadedCopy
-from typing import Dict, List, Tuple
 from pathlib import Path
+from typing import Dict, List, Tuple
+
+from copythreader import ThreadedCopy
+from purger import Purger
 
 
 class Syncer:
@@ -17,7 +19,8 @@ class Syncer:
             logging.info("No files to sync.")
         else:
             logging.info(f"Syncing {len(modified_files)} files.")
-            threaded_copy = ThreadedCopy(self.src_dir, self.replica_dir, modified_files)
+            ThreadedCopy(self.src_dir, self.replica_dir, modified_files)
+        Purger(self.src_dir, self.replica_dir)
 
     def has_been_modified(self, file_path: Path) -> bool:
         last_modified = os.path.getmtime(file_path)
@@ -30,15 +33,30 @@ class Syncer:
         self.modified_dates[file_path] = last_modified
         return True
 
+    # def travers_get_modification_times_2(self, directory_path: Path) -> List[Path]:
+    #     modified_files = []
+    #     try:
+    #         for root, dirs, files in os.walk(directory_path):
+    #             for filename in files:
+    #                 file_path = Path(root) / filename
+    #                 if self.has_been_modified(file_path):
+    #                     modified_files.append(file_path)
+    #     except OSError as e:
+    #         print(f"Error getting modification time {directory_path}: {e}")
+    #         return []
+    #     return modified_files
+
     def travers_get_modification_times(self, directory_path: Path) -> List[Path]:
         modified_files = []
         try:
-            for root, dirs, files in os.walk(directory_path):
-                for filename in files:
-                    file_path = Path(root) / filename
-                    if self.has_been_modified(file_path):
-                        modified_files.append(file_path)
+            for item in directory_path.iterdir():
+                if item.is_file():
+                    if self.has_been_modified(item):
+                        modified_files.append(item)
+                elif item.is_dir():
+                    if self.has_been_modified(item):
+                        modified_files.extend(self.travers_get_modification_times(item))
         except OSError as e:
             print(f"Error getting modification time {directory_path}: {e}")
-            return ([], [])
+            return []
         return modified_files

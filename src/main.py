@@ -15,6 +15,7 @@ def setup() -> None:
     syncer = Syncer(args.src_dir, args.replica_dir)
     schedule.every(args.period).minutes.do(syncer.sync_folders)
     logging.info("Setup complete. Starting the program.")
+    syncer.sync_folders()
 
 
 def main() -> None:
