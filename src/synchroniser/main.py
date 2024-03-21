@@ -3,9 +3,9 @@
 import logging
 
 import schedule
-from argparser import ArgParser
-from logger import setup_logging
-from syncer import Syncer
+from synchroniser.argparser import ArgParser
+from synchroniser.logger import setup_logging
+from synchroniser.syncer import Syncer
 
 
 def setup() -> None:

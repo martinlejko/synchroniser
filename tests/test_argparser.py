@@ -2,7 +2,7 @@ import sys
 from argparse import Namespace
 
 import pytest
-from argparser import ArgParser
+from synchroniser.argparser import ArgParser
 
 
 def test_missing_required_args() -> None:

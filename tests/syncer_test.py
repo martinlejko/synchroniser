@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Generator
 
 import pytest
-from syncer import Syncer
+from synchroniser.syncer import Syncer
 
 
 @pytest.fixture

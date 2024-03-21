@@ -3,8 +3,8 @@ import os
 from pathlib import Path
 from typing import Dict, List
 
-from copythreader import ThreadedCopy
-from purger import Purger
+from synchroniser.copythreader import ThreadedCopy
+from synchroniser.purger import Purger
 
 
 class Syncer:

@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Martin Lejko <Martin.lejko@outlook.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "synchroniser", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

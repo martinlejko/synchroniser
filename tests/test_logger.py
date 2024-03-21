@@ -2,7 +2,7 @@ import logging
 import os
 import tempfile
 
-from logger import setup_logging
+from synchroniser.logger import setup_logging
 
 
 def test_logging_info() -> None:
