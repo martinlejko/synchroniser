@@ -1,7 +1,7 @@
 import logging
 import os
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from copythreader import ThreadedCopy
 from purger import Purger
@@ -32,19 +32,6 @@ class Syncer:
                 return False
         self.modified_dates[file_path] = last_modified
         return True
-
-    # def travers_get_modification_times_2(self, directory_path: Path) -> List[Path]:
-    #     modified_files = []
-    #     try:
-    #         for root, dirs, files in os.walk(directory_path):
-    #             for filename in files:
-    #                 file_path = Path(root) / filename
-    #                 if self.has_been_modified(file_path):
-    #                     modified_files.append(file_path)
-    #     except OSError as e:
-    #         print(f"Error getting modification time {directory_path}: {e}")
-    #         return []
-    #     return modified_files
 
     def travers_get_modification_times(self, directory_path: Path) -> List[Path]:
         modified_files = []
