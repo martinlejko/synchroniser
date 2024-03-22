@@ -24,15 +24,14 @@ and  enter the virtual environment created by Poetry:
 Now, everything should be set up and ready to use within the virtual environment created by Poetry.
 
 ## Usage
-
-- The `main.py` script in `synchroniser/src/` directory is marked as executable, allowing you to run it directly from the command line.
+- After activating the Poetry shell, you can simply execute synchroniser to run the application, as it has been set up as the executable in the pyproject.toml configuration. There's no need to specify the full path; just type synchroniser and you're good to go
 - For help and parameters, execute the following command:
     ```bash
-    ./synchroniser/src/main.py -h
+    synchroniser -h
     ```
 
     This will display usage information:
     ```bash
-    usage: main.py [-h] src_dir replica_dir period log_file
+    usage: synchroniser [-h] src_dir replica_dir period log_file
     ```
 
