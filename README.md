@@ -17,7 +17,7 @@ The program synchronizes two folders, ensuring that the replica folder maintains
 4. Navigate to the project directory and install dependencies using Poetry
 and  enter the virtual environment created by Poetry: 
     ```bash
-    cd syncer
+    cd synchroniser
     poetry install
     poetry shell
     ```
