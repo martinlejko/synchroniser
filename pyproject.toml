@@ -6,6 +6,9 @@ authors = ["Martin Lejko <Martin.lejko@outlook.com>"]
 readme = "README.md"
 packages = [{include = "synchroniser", from = "src"}]
 
+[tool.poetry.scripts]
+synchroniser = "synchroniser.__main__:main"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 schedule = "^1.2.1"
